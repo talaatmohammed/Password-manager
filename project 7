@@ -1,0 +1,25 @@
+import sqlite3
+import getpass
+
+# Connect to the SQLite database
+conn = sqlite3.connect('passwords.db')
+
+# Create a table to store the passwords
+conn.execute('CREATE TABLE IF NOT EXISTS passwords (website TEXT, username TEXT, password TEXT)')
+
+# Get the user's input for the new password
+website = input('Enter the website: ')
+username = input('Enter your username: ')
+password = getpass.getpass('Enter your password: ')
+
+# Insert the new password into the database
+conn.execute('INSERT INTO passwords (website, username, password) VALUES (?, ?, ?)', (website, username, password))
+conn.commit()
+
+# Display all the passwords in the database
+print('\nAll passwords in database:')
+for row in conn.execute('SELECT * FROM passwords'):
+    print(row)
+
+# Close the database connection
+conn.close()
